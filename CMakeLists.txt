@@ -4,6 +4,7 @@ project(clang-pimpl)
 
 find_package(LLVM REQUIRED CONFIG)
 find_package(Clang REQUIRED)
+include (CTest)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -std=c++2a")
 
@@ -41,3 +42,5 @@ clangRewrite
 clangSerialization
 clangTooling
 )
+
+add_subdirectory(regression_tests)

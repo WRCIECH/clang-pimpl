@@ -1,0 +1,27 @@
+// Specyfikacja filesystem
+// Specyfikacja CMakeLists.txt
+
+GIVEN_FILESYSTEM tester
+main.cc
+END
+
+GIVEN_FILE main.cc
+  struct Test {
+    int a;
+    double b;
+  };
+END
+
+EXECUTE
+clang-pimpl --record-name=Test --fields-order=b,a -i ./main.cc
+END
+
+EXPECT_STDOUT
+END
+
+EXPECT_FILE main.cc
+  struct Test {
+    double b;
+    int a;
+  };
+END
