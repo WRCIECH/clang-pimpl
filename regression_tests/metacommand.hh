@@ -18,6 +18,7 @@ class MetacommandExecutor {
 public:
   virtual ~MetacommandExecutor() = default;
   virtual void execute(std::string const &content) = 0;
+  virtual void clear() {}
 };
 
 class ExpectStdoutCommand : public MetacommandExecutor {

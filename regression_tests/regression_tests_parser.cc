@@ -34,7 +34,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
   size_t current_line_number{0u};
   std::string content{};
   bool requires_metacommand{true};
-  std::unique_ptr<MetacommandExecutor> executor;
+  std::vector<std::unique_ptr<MetacommandExecutor>> executors;
 
   try {
     while (std::getline(file, line)) {
@@ -57,30 +57,31 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       switch (*metacommand) {
       case Metacommand::GIVEN_FILESYSTEM:
         requires_metacommand = false;
-        executor = std::make_unique<GivenFilesystemCommand>(result[0]);
+        executors.emplace_back(
+            std::make_unique<GivenFilesystemCommand>(result[0]));
         break;
       case Metacommand::GIVEN_FILE:
         requires_metacommand = false;
-        executor = std::make_unique<GivenFileCommand>(result[0]);
+        executors.emplace_back(std::make_unique<GivenFileCommand>(result[0]));
         break;
       case Metacommand::EXECUTE:
         requires_metacommand = false;
-        executor = std::make_unique<ExecuteCommand>();
+        executors.emplace_back(std::make_unique<ExecuteCommand>());
         break;
       case Metacommand::EXPECT_STDOUT:
         requires_metacommand = false;
-        executor = std::make_unique<ExpectStdoutCommand>();
+        executors.emplace_back(std::make_unique<ExpectStdoutCommand>());
         break;
       case Metacommand::EXPECT_FILE:
         requires_metacommand = false;
-        executor = std::make_unique<ExpectFileCommand>(result[0]);
+        executors.emplace_back(std::make_unique<ExpectFileCommand>(result[0]));
         break;
       case Metacommand::END:
         requires_metacommand = true;
         if (!content.empty()) {
           content.pop_back();
         }
-        executor->execute(std::exchange(content, ""));
+        executors.back()->execute(std::exchange(content, ""));
         break;
       }
     }
@@ -90,6 +91,8 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     std::cerr << e.what() << std::endl;
     return -1;
   }
+  std::for_each(executors.rbegin(), executors.rend(),
+                [](auto &executor) { executor->clear(); });
   std::cout << "All good!\n";
   return 0;
 }
