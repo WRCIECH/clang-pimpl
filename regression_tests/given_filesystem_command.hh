@@ -6,8 +6,8 @@
 
 class GivenFilesystemCommand : public MetacommandExecutor {
 public:
-  GivenFilesystemCommand(std::string const &main_directory)
-      : main_directory_(main_directory) {
+  GivenFilesystemCommand(GlobalState &state, std::string const &main_directory)
+      : MetacommandExecutor(state), main_directory_(main_directory) {
 
     llvm::sys::fs::current_path(testing_project_directory_);
     testing_project_directory_.append({"/", main_directory_});
@@ -31,6 +31,7 @@ public:
     int file_succeeded{0};
     auto op_result =
         llvm::sys::fs::openFileForWrite(path_to_file, file_succeeded);
+    state_.files_map[file_name] = path_to_file;
   }
   void generateCmakeLists() {
     auto path_to_file{testing_project_directory_};

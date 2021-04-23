@@ -5,10 +5,14 @@
 
 class GivenFileCommand : public MetacommandExecutor {
 public:
-  GivenFileCommand(std::string const &file_name) : file_name_(file_name) {}
+  GivenFileCommand(GlobalState &state, std::string const &file_name)
+      : MetacommandExecutor(state), file_name_(file_name) {}
   void execute(std::string const &content) override {
-    std::cout << "GivenFileCommand: " << std::quoted(content) << " in file "
-              << file_name_ << std::endl;
+    int fd{0};
+    auto op_result =
+        llvm::sys::fs::openFileForWrite(state_.files_map[file_name_], fd);
+    llvm::raw_fd_ostream file_writer(fd, true);
+    file_writer << content;
   }
 
 private:

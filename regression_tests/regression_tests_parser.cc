@@ -35,6 +35,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
   std::string content{};
   bool requires_metacommand{true};
   std::vector<std::unique_ptr<MetacommandExecutor>> executors;
+  GlobalState state;
 
   try {
     while (std::getline(file, line)) {
@@ -58,23 +59,25 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       case Metacommand::GIVEN_FILESYSTEM:
         requires_metacommand = false;
         executors.emplace_back(
-            std::make_unique<GivenFilesystemCommand>(result[0]));
+            std::make_unique<GivenFilesystemCommand>(state, result[0]));
         break;
       case Metacommand::GIVEN_FILE:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<GivenFileCommand>(result[0]));
+        executors.emplace_back(
+            std::make_unique<GivenFileCommand>(state, result[0]));
         break;
       case Metacommand::EXECUTE:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<ExecuteCommand>());
+        executors.emplace_back(std::make_unique<ExecuteCommand>(state));
         break;
       case Metacommand::EXPECT_STDOUT:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<ExpectStdoutCommand>());
+        executors.emplace_back(std::make_unique<ExpectStdoutCommand>(state));
         break;
       case Metacommand::EXPECT_FILE:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<ExpectFileCommand>(result[0]));
+        executors.emplace_back(
+            std::make_unique<ExpectFileCommand>(state, result[0]));
         break;
       case Metacommand::END:
         requires_metacommand = true;
@@ -91,8 +94,8 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     std::cerr << e.what() << std::endl;
     return -1;
   }
-  std::for_each(executors.rbegin(), executors.rend(),
-                [](auto &executor) { executor->clear(); });
+  // std::for_each(executors.rbegin(), executors.rend(),
+  //               [](auto &executor) { executor->clear(); });
   std::cout << "All good!\n";
   return 0;
 }

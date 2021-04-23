@@ -5,7 +5,8 @@
 
 class ExpectFileCommand : public MetacommandExecutor {
 public:
-  ExpectFileCommand(std::string const &file_name) : file_name_(file_name) {}
+  ExpectFileCommand(GlobalState &state, std::string const &file_name)
+      : MetacommandExecutor(state), file_name_(file_name) {}
   void execute(std::string const &content) override {
     std::cout << "ExpectFileCommand: " << std::quoted(content) << " in file "
               << file_name_ << std::endl;
