@@ -1,93 +1,27 @@
-//===-- tools/extra/clang-reorder-fields/tool/ClangReorderFields.cpp -*- C++ -*-===//
-//
-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-// See https://llvm.org/LICENSE.txt for license information.
-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-//
-//===----------------------------------------------------------------------===//
-///
-/// \file
-/// This file contains the implementation of clang-reorder-fields tool
-///
-//===----------------------------------------------------------------------===//
-
-#include "PimplAction.hh"
-#include "clang/Basic/Diagnostic.h"
-#include "clang/Basic/DiagnosticOptions.h"
-#include "clang/Basic/FileManager.h"
-#include "clang/Basic/LangOptions.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Frontend/TextDiagnosticPrinter.h"
-#include "clang/Rewrite/Core/Rewriter.h"
-#include "clang/Tooling/CommonOptionsParser.h"
-#include "clang/Tooling/Refactoring.h"
-#include "clang/Tooling/Tooling.h"
-#include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/Support/CommandLine.h"
-#include "llvm/Support/FileSystem.h"
-#include <cstdlib>
-#include <string>
-#include <system_error>
-
-using namespace llvm;
-using namespace clang;
-
-cl::OptionCategory ClangReorderFieldsCategory("clang-reorder-fields options");
-
-static cl::opt<std::string>
-    RecordName("record-name", cl::Required,
-               cl::desc("The name of the struct/class."),
-               cl::cat(ClangReorderFieldsCategory));
-
-static cl::list<std::string> FieldsOrder("fields-order", cl::CommaSeparated,
-                                         cl::OneOrMore,
-                                         cl::desc("The desired fields order."),
-                                         cl::cat(ClangReorderFieldsCategory));
-
-static cl::opt<bool> Inplace("i", cl::desc("Overwrite edited files."),
-                             cl::cat(ClangReorderFieldsCategory));
-
-const char Usage[] = "A tool to reorder fields in C/C++ structs/classes.\n";
+#include "clang_order_fields_master.hh"
+#include "command_line_files_keeper.hh"
+#include "files_keeper_for_regression_tests.hh"
 
 int main(int argc, const char **argv) {
-  auto ExpectedParser = tooling::CommonOptionsParser::create(
-      argc, argv, ClangReorderFieldsCategory, cl::OneOrMore, Usage);
-  if (!ExpectedParser) {
-    llvm::errs() << ExpectedParser.takeError();
-    return 1;
+  ClangOrderFieldsMaster m;
+  // auto parsing_result = m.parseArguments(CommandLineFilesKeeper::create(argc,
+  // argv));
+  FieldsOrderPack pack;
+  pack.source_path_list = {"./main.cc"};
+  pack.record_name = "Test";
+  pack.fields_order = {"b", "a"};
+  pack.all_files = {
+      "/home/wojciech/Projekty/clang-pimpl/build/tiny_test/main.cc"};
+  pack.compile_commands = {clang::tooling::CompileCommand(
+      "/home/wojciech/Projekty/clang-pimpl/build/tiny_test",
+      "/home/wojciech/Projekty/clang-pimpl/build/tiny_test/main.cc",
+      {"/usr/bin/c++", "-o", "CMakeFiles/test_app.dir/main.cc.o", "-c",
+       "/home/wojciech/Projekty/clang-pimpl/build/tiny_test/main.cc"},
+      "")};
+  auto parsing_result =
+      m.parseArguments(FilesKeeperForRegressionTests::create(pack));
+  if (parsing_result) {
+    return -1;
   }
-
-  tooling::CommonOptionsParser &OP = ExpectedParser.get();
-
-  auto Files = OP.getSourcePathList();
-  tooling::RefactoringTool Tool(OP.getCompilations(), Files);
-
-  reorder_fields::ReorderFieldsAction Action(RecordName, FieldsOrder,
-                                             Tool.getReplacements());
-
-  auto Factory = tooling::newFrontendActionFactory(&Action);
-
-  if (Inplace)
-    return Tool.runAndSave(Factory.get());
-
-  int ExitCode = Tool.run(Factory.get());
-  LangOptions DefaultLangOptions;
-  IntrusiveRefCntPtr<DiagnosticOptions> DiagOpts(new DiagnosticOptions());
-  TextDiagnosticPrinter DiagnosticPrinter(errs(), &*DiagOpts);
-  DiagnosticsEngine Diagnostics(
-      IntrusiveRefCntPtr<DiagnosticIDs>(new DiagnosticIDs()), &*DiagOpts,
-      &DiagnosticPrinter, false);
-
-  auto &FileMgr = Tool.getFiles();
-  SourceManager Sources(Diagnostics, FileMgr);
-  Rewriter Rewrite(Sources, DefaultLangOptions);
-  Tool.applyAllReplacements(Rewrite);
-
-  for (const auto &File : Files) {
-    auto Entry = FileMgr.getFile(File);
-    const auto ID = Sources.getOrCreateFileID(*Entry, SrcMgr::C_User);
-    Rewrite.getEditBuffer(ID).write(outs());
-  }
-
-  return ExitCode;
+  return m.performRefactoring();
 }

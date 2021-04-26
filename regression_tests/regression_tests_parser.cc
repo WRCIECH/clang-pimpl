@@ -35,7 +35,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
   std::string content{};
   bool requires_metacommand{true};
   std::vector<std::unique_ptr<MetacommandExecutor>> executors;
-  GlobalState state;
+  FieldsOrderPack state;
 
   try {
     while (std::getline(file, line)) {
@@ -69,10 +69,6 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       case Metacommand::EXECUTE:
         requires_metacommand = false;
         executors.emplace_back(std::make_unique<ExecuteCommand>(state));
-        break;
-      case Metacommand::EXPECT_STDOUT:
-        requires_metacommand = false;
-        executors.emplace_back(std::make_unique<ExpectStdoutCommand>(state));
         break;
       case Metacommand::EXPECT_FILE:
         requires_metacommand = false;
@@ -108,8 +104,6 @@ RegressionTestsParser::determineMetacommand(std::string const &s) {
     return Metacommand::GIVEN_FILE;
   if (s == "EXECUTE")
     return Metacommand::EXECUTE;
-  if (s == "EXPECT_STDOUT")
-    return Metacommand::EXPECT_STDOUT;
   if (s == "EXPECT_FILE")
     return Metacommand::EXPECT_FILE;
   if (s == "END")

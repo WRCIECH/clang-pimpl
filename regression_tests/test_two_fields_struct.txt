@@ -1,6 +1,3 @@
-// Specyfikacja filesystem
-// Specyfikacja CMakeLists.txt
-
 GIVEN_FILESYSTEM tester
 main.cc
 END
@@ -13,10 +10,7 @@ GIVEN_FILE main.cc
 END
 
 EXECUTE
-clang-pimpl --record-name=Test --fields-order=b,a -i ./main.cc
-END
-
-EXPECT_STDOUT
+--record-name=Test --fields-order=b,a -i ./main.cc
 END
 
 EXPECT_FILE main.cc

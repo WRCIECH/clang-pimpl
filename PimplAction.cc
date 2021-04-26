@@ -1,4 +1,5 @@
-//===-- tools/extra/clang-reorder-fields/ReorderFieldsAction.cpp -*- C++ -*-===//
+//===-- tools/extra/clang-reorder-fields/ReorderFieldsAction.cpp -*- C++
+//-*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -59,8 +60,9 @@ getNewFieldsOrder(const RecordDecl *Definition,
   assert(Definition && "Definition is null");
 
   llvm::StringMap<unsigned> NameToIndex;
-  for (const auto *Field : Definition->fields())
+  for (const auto *Field : Definition->fields()) {
     NameToIndex[Field->getName()] = Field->getFieldIndex();
+  }
 
   if (DesiredFieldsOrder.size() != NameToIndex.size()) {
     llvm::errs() << "Number of provided fields doesn't match definition.\n";
@@ -305,7 +307,7 @@ public:
 
 std::unique_ptr<ASTConsumer> ReorderFieldsAction::newASTConsumer() {
   return std::make_unique<ReorderingConsumer>(RecordName, DesiredFieldsOrder,
-                                               Replacements);
+                                              Replacements);
 }
 
 } // namespace reorder_fields

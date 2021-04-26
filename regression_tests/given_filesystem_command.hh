@@ -6,7 +6,8 @@
 
 class GivenFilesystemCommand : public MetacommandExecutor {
 public:
-  GivenFilesystemCommand(GlobalState &state, std::string const &main_directory)
+  GivenFilesystemCommand(FieldsOrderPack &state,
+                         std::string const &main_directory)
       : MetacommandExecutor(state), main_directory_(main_directory) {
 
     llvm::sys::fs::current_path(testing_project_directory_);
@@ -15,12 +16,11 @@ public:
 
   void execute(std::string const &content) override {
     auto result = llvm::sys::fs::create_directory(testing_project_directory_);
-    auto list_of_files = generateListOfFiles(content);
+    state_.all_files = generateListOfFiles(content);
     std::cout << "GivenFilesystemCommand: " << std::endl;
-    for (auto f : list_of_files) {
+    for (auto f : state_.all_files) {
       createFile(f);
     }
-    generateCmakeLists();
   }
 
   void createFile(std::string const &file_name) {
@@ -31,16 +31,17 @@ public:
     int file_succeeded{0};
     auto op_result =
         llvm::sys::fs::openFileForWrite(path_to_file, file_succeeded);
-    state_.files_map[file_name] = path_to_file;
-  }
-  void generateCmakeLists() {
-    auto path_to_file{testing_project_directory_};
-    path_to_file.append({"/", "CMakeLists.txt"});
-    std::cout << "generates file in position " << path_to_file.c_str()
-              << std::endl;
-    int file_succeeded{0};
-    auto op_result =
-        llvm::sys::fs::openFileForWrite(path_to_file, file_succeeded);
+
+    // Fill:
+    state_.source_path_list.emplace_back(path_to_file.c_str());
+    state_.all_files.emplace_back(file_name);
+    state_.file_name_to_path[file_name] = path_to_file.c_str();
+    clang::tooling::CompileCommand compile_command(
+        testing_project_directory_.c_str(), path_to_file.c_str(),
+        {"/usr/bin/c++", "-o", "CMakeFiles/test_app.dir/main.cc.o", "-c",
+         path_to_file.c_str()},
+        "");
+    state_.compile_commands.emplace_back(std::move(compile_command));
   }
 
   std::vector<std::string> generateListOfFiles(std::string const &content) {

@@ -18,6 +18,9 @@ add_definitions(${LLVM_DEFINITIONS})
 # Now build our tools
 add_executable(clang-pimpl 
     clang_pimpl.cc
+    clang_order_fields_master.cc
+    command_line_files_keeper.cc
+    files_keeper_for_regression_tests.cc
     PimplAction.cc
 )
 
