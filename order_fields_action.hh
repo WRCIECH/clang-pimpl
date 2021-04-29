@@ -12,8 +12,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef LLVM_CLANG_TOOLS_EXTRA_CLANG_REORDER_FIELDS_ACTION_H
-#define LLVM_CLANG_TOOLS_EXTRA_CLANG_REORDER_FIELDS_ACTION_H
+#pragma once
 
 #include "clang/Tooling/Refactoring.h"
 

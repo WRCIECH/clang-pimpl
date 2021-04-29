@@ -1,7 +1,7 @@
 #pragma once
 
+#include "../files_keeper.hh"
 #include "fields_order_pack.hh"
-#include "files_keeper.hh"
 #include <memory>
 
 class FilesKeeperForRegressionTests : public FilesKeeper {

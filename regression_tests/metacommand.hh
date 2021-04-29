@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../fields_order_pack.hh"
+#include "fields_order_pack.hh"
 #include "llvm/Support/FileSystem.h"
 #include <iomanip>
 #include <iostream>
