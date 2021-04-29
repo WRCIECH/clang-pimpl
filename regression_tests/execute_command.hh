@@ -8,9 +8,31 @@
 class ExecuteCommand : public MetacommandExecutor {
 public:
   ExecuteCommand(FieldsOrderPack &state) : MetacommandExecutor(state) {}
-  void execute(std::string const &content) override {
-    state_.record_name = "Test";
-    state_.fields_order = {"b", "a"};
+  int execute(std::string const &content) override {
+    std::map<std::string, std::vector<std::string>> commands;
+
+    std::stringstream lines{content};
+    for (std::string line{}; std::getline(lines, line, '\n');) {
+      std::stringstream words{line};
+      std::string command_name;
+      words >> command_name;
+      for (std::string word{}; std::getline(words, word, ' ');) {
+        if (!word.empty()) {
+          commands[command_name].emplace_back(word);
+        }
+      }
+    }
+
+    if (commands.count("record-name") > 0) {
+      state_.record_name = commands["record-name"][0];
+    } else {
+      std::cout << "record-name command not recognized\n";
+    }
+    if (commands.count("fields-order") > 0) {
+      state_.fields_order = commands["fields-order"];
+    } else {
+      std::cout << "fields-order command not recognized\n";
+    }
 
     ClangOrderFieldsMaster m;
     auto parsing_result =
@@ -19,5 +41,7 @@ public:
       std::cout << "Parsing failed!\n";
     }
     m.performRefactoring();
+
+    return 0;
   }
 };

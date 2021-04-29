@@ -5,8 +5,7 @@
 class CompilationDatabaseForRegressionTests
     : public clang::tooling::CompilationDatabase {
 public:
-  CompilationDatabaseForRegressionTests(FieldsOrderPack const &pack)
-      : pack_(pack) {}
+  CompilationDatabaseForRegressionTests(FieldsOrderPack &pack) : pack_(pack) {}
 
 private:
   std::vector<clang::tooling::CompileCommand>
@@ -27,14 +26,14 @@ private:
 };
 
 FilesKeeperForRegressionTests::FilesKeeperForRegressionTests(
-    FieldsOrderPack const &pack)
+    FieldsOrderPack &pack)
     : pack_(pack) {
   compilation_database_ =
       std::make_unique<CompilationDatabaseForRegressionTests>(pack_);
 }
 
 std::unique_ptr<FilesKeeperForRegressionTests>
-FilesKeeperForRegressionTests::create(FieldsOrderPack const &pack) {
+FilesKeeperForRegressionTests::create(FieldsOrderPack &pack) {
   return std::make_unique<FilesKeeperForRegressionTests>(pack);
 }
 bool FilesKeeperForRegressionTests::isOk() { return true; }
@@ -60,3 +59,9 @@ FilesKeeperForRegressionTests::getDesiredFieldsOrder() const {
   return pack_.fields_order;
 }
 bool FilesKeeperForRegressionTests::isInplace() const { return false; }
+
+llvm::raw_ostream *FilesKeeperForRegressionTests::getRawOstreamForFile(
+    std::string const &file_name) {
+
+  return &pack_.results;
+}

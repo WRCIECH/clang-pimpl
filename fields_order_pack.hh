@@ -5,6 +5,7 @@
 #include <vector>
 
 struct FieldsOrderPack {
+  FieldsOrderPack() : results(output) {}
   std::vector<std::string> source_path_list;
   std::string record_name;
   std::vector<std::string> fields_order;
@@ -14,4 +15,8 @@ struct FieldsOrderPack {
   // Used to find file paths in regression tests. Not transmitted to refactor
   // tools.
   std::map<std::string, std::string> file_name_to_path;
+
+  // Used to provide the result of the refactorization.
+  std::string output;
+  llvm::raw_string_ostream results;
 };

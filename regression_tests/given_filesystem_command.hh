@@ -14,25 +14,22 @@ public:
     testing_project_directory_.append({"/", main_directory_});
   }
 
-  void execute(std::string const &content) override {
+  int execute(std::string const &content) override {
     auto result = llvm::sys::fs::create_directory(testing_project_directory_);
     state_.all_files = generateListOfFiles(content);
-    std::cout << "GivenFilesystemCommand: " << std::endl;
     for (auto f : state_.all_files) {
       createFile(f);
     }
+    return 0;
   }
 
   void createFile(std::string const &file_name) {
     auto path_to_file{testing_project_directory_};
     path_to_file.append({"/", file_name});
-    std::cout << "generates file in position " << path_to_file.c_str()
-              << std::endl;
     int file_succeeded{0};
     auto op_result =
         llvm::sys::fs::openFileForWrite(path_to_file, file_succeeded);
 
-    // Fill:
     state_.source_path_list.emplace_back(path_to_file.c_str());
     state_.all_files.emplace_back(file_name);
     state_.file_name_to_path[file_name] = path_to_file.c_str();

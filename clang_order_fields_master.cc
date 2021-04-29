@@ -1,5 +1,5 @@
 #include "clang_order_fields_master.hh"
-#include "PimplAction.hh"
+#include "order_fields_action.hh"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/FileManager.h"
@@ -8,6 +8,7 @@
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include <iostream>
 
 using namespace llvm;
 using namespace clang;
@@ -59,7 +60,10 @@ int ClangOrderFieldsMaster::performDryRunRefactoring(
   for (const auto &file : *files_keeper_->getSourcePathList()) {
     auto entry = file_manager.getFile(file);
     const auto id = sources.getOrCreateFileID(*entry, SrcMgr::C_User);
-    rewriter.getEditBuffer(id).write(outs());
+
+    auto &buffer_for_file = *files_keeper_->getRawOstreamForFile(file);
+
+    rewriter.getEditBuffer(id).write(buffer_for_file);
   }
 
   return exit_code;

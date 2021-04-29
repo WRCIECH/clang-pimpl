@@ -19,5 +19,5 @@ int main(int argc, char *argv[]) {
   if (argc == 2) {
     std::filesystem::remove_all(TESTING_DIRECTORY_ROOT);
   }
-  return -1; // result;
+  return result;
 }

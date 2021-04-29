@@ -24,6 +24,7 @@ bool RegressionTestsParser::isCommentLine(std::string const &line_word) const {
 
 int RegressionTestsParser::parseFile(std::string const &file_location) {
   std::fstream file(file_location);
+  int tests_result{0};
 
   if (!file.is_open()) {
     std::cerr << "File was not found [" << file_location << "]\n";
@@ -80,7 +81,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
         if (!content.empty()) {
           content.pop_back();
         }
-        executors.back()->execute(std::exchange(content, ""));
+        tests_result = executors.back()->execute(std::exchange(content, ""));
         break;
       }
     }
@@ -90,10 +91,10 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     std::cerr << e.what() << std::endl;
     return -1;
   }
-  // std::for_each(executors.rbegin(), executors.rend(),
-  //               [](auto &executor) { executor->clear(); });
-  std::cout << "All good!\n";
-  return 0;
+  std::for_each(executors.rbegin(), executors.rend(),
+                [](auto &executor) { executor->clear(); });
+  std::cout << "Tests result " << tests_result << std::endl;
+  return tests_result;
 }
 
 std::optional<Metacommand>
@@ -110,11 +111,6 @@ RegressionTestsParser::determineMetacommand(std::string const &s) {
     return Metacommand::END;
 
   return std::nullopt;
-}
-
-void RegressionTestsParser::executeCommand(
-    std::deque<std::string> const &words) {
-  // Execute!
 }
 
 ParsingException

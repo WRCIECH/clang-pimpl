@@ -6,9 +6,9 @@
 
 class FilesKeeperForRegressionTests : public FilesKeeper {
 public:
-  FilesKeeperForRegressionTests(FieldsOrderPack const &pack);
+  FilesKeeperForRegressionTests(FieldsOrderPack &pack);
   static std::unique_ptr<FilesKeeperForRegressionTests>
-  create(FieldsOrderPack const &pack);
+  create(FieldsOrderPack &pack);
   bool isOk() override;
   llvm::Error getError() override;
 
@@ -20,7 +20,10 @@ public:
   llvm::ArrayRef<std::string> getDesiredFieldsOrder() const override;
   bool isInplace() const override;
 
+  llvm::raw_ostream *
+  getRawOstreamForFile(std::string const &file_name) override;
+
 private:
   std::unique_ptr<clang::tooling::CompilationDatabase> compilation_database_;
-  const FieldsOrderPack &pack_;
+  FieldsOrderPack &pack_;
 };
