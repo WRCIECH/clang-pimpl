@@ -28,8 +28,4 @@ public:
   virtual llvm::StringRef getRecordName() const = 0;
   virtual llvm::ArrayRef<std::string> getDesiredFieldsOrder() const = 0;
   virtual bool isInplace() const = 0;
-  virtual llvm::raw_ostream *
-  getRawOstreamForFile(std::string const &file_name) {
-    return &llvm::outs();
-  }
 };

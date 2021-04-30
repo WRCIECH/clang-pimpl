@@ -40,8 +40,6 @@ public:
     if (parsing_result) {
       std::cout << "Parsing failed!\n";
     }
-    m.performRefactoring();
-
-    return 0;
+    return m.performRefactoring();
   }
 };

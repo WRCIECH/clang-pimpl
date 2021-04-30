@@ -34,6 +34,7 @@ int ClangOrderFieldsMaster::performRefactoring() {
   auto factory = tooling::newFrontendActionFactory(&action);
 
   if (files_keeper_->isInplace()) {
+    std::cout << "Run is INplace\n";
     return tool_->runAndSave(factory.get());
   }
 
@@ -61,9 +62,7 @@ int ClangOrderFieldsMaster::performDryRunRefactoring(
     auto entry = file_manager.getFile(file);
     const auto id = sources.getOrCreateFileID(*entry, SrcMgr::C_User);
 
-    auto &buffer_for_file = *files_keeper_->getRawOstreamForFile(file);
-
-    rewriter.getEditBuffer(id).write(buffer_for_file);
+    rewriter.getEditBuffer(id).write(llvm::outs());
   }
 
   return exit_code;

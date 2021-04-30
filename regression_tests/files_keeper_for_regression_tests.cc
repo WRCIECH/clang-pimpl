@@ -58,10 +58,4 @@ llvm::ArrayRef<std::string>
 FilesKeeperForRegressionTests::getDesiredFieldsOrder() const {
   return pack_.fields_order;
 }
-bool FilesKeeperForRegressionTests::isInplace() const { return false; }
-
-llvm::raw_ostream *FilesKeeperForRegressionTests::getRawOstreamForFile(
-    std::string const &file_name) {
-
-  return &pack_.results;
-}
+bool FilesKeeperForRegressionTests::isInplace() const { return true; }

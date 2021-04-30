@@ -82,6 +82,9 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
           content.pop_back();
         }
         tests_result = executors.back()->execute(std::exchange(content, ""));
+        if (tests_result != 0) {
+          return tests_result;
+        }
         break;
       }
     }

@@ -20,9 +20,6 @@ public:
   llvm::ArrayRef<std::string> getDesiredFieldsOrder() const override;
   bool isInplace() const override;
 
-  llvm::raw_ostream *
-  getRawOstreamForFile(std::string const &file_name) override;
-
 private:
   std::unique_ptr<clang::tooling::CompilationDatabase> compilation_database_;
   FieldsOrderPack &pack_;
