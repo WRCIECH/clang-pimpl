@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../clang_order_fields_master.hh"
+#include "clang_order_fields/clang_order_fields_master.hh"
 #include "files_keeper_for_regression_tests.hh"
 #include "metacommand.hh"
 #include "llvm/Support/FileSystem.h"

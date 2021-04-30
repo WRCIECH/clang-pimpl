@@ -41,5 +41,3 @@ public:
 };
 } // namespace reorder_fields
 } // namespace clang
-
-#endif // LLVM_CLANG_TOOLS_EXTRA_CLANG_REORDER_FIELDS_ACTION_H

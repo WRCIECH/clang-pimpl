@@ -1,4 +1,4 @@
-#include "clang_order_fields_master.hh"
+#include "clang_order_fields/clang_order_fields_master.hh"
 #include "command_line_files_keeper.hh"
 
 int main(int argc, const char **argv) {
