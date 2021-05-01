@@ -8,10 +8,12 @@ public:
   GivenFileCommand(FieldsOrderPack &state, std::string const &file_name)
       : MetacommandExecutor(state), file_name_(file_name) {}
   int execute(std::string const &content) override {
+    std::cout << "GivenFile command! " << file_name_ << "\n";
     int fd{0};
     auto it = state_.file_name_to_path.find(file_name_);
     if (it == state_.file_name_to_path.end()) {
-      std::cout << "File was not found !!! \n";
+      std::cout << "GivenFileCommand: " << file_name_
+                << " file was not found !!! \n";
       return -1;
     }
 

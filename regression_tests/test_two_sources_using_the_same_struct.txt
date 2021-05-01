@@ -1,0 +1,52 @@
+GIVEN_FILESYSTEM tester
+main.hh
+file_one.cc
+file_two.cc
+END
+
+GIVEN_FILE main.hh
+  struct Test {
+    int a;
+    double b;
+  };
+END
+
+GIVEN_FILE file_one.cc
+  #include "main.hh"
+  struct UseTestOne{
+    Test t;
+  };
+END
+
+GIVEN_FILE file_two.cc
+  #include "main.hh"
+  struct UseTestTwo{
+    Test t;
+  };
+END
+
+EXECUTE
+record-name Test 
+fields-order b a
+END
+
+EXPECT_FILE main.hh
+  struct Test {
+    double b;
+    int a;
+  };
+END
+
+EXPECT_FILE file_one.cc
+  #include "main.hh"
+  struct UseTestOne{
+    Test t;
+  };
+END
+
+EXPECT_FILE file_two.cc
+  #include "main.hh"
+  struct UseTestTwo{
+    Test t;
+  };
+END

@@ -34,7 +34,6 @@ int ClangOrderFieldsMaster::performRefactoring() {
   auto factory = tooling::newFrontendActionFactory(&action);
 
   if (files_keeper_->isInplace()) {
-    std::cout << "Run is INplace\n";
     return tool_->runAndSave(factory.get());
   }
 

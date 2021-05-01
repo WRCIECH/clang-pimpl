@@ -13,7 +13,8 @@
 #include <iterator>
 
 RegressionTestsParser::RegressionTestsParser(
-    std::string const &directory_location) {}
+    std::string const &directory_location)
+    : test_directory_name_(directory_location) {}
 
 bool RegressionTestsParser::isCommentLine(std::string const &line_word) const {
   bool line_is_empty = line_word.empty();
@@ -59,8 +60,8 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       switch (*metacommand) {
       case Metacommand::GIVEN_FILESYSTEM:
         requires_metacommand = false;
-        executors.emplace_back(
-            std::make_unique<GivenFilesystemCommand>(state, result[0]));
+        executors.emplace_back(std::make_unique<GivenFilesystemCommand>(
+            state, test_directory_name_, result[0]));
         break;
       case Metacommand::GIVEN_FILE:
         requires_metacommand = false;
@@ -94,8 +95,6 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     std::cerr << e.what() << std::endl;
     return -1;
   }
-  std::for_each(executors.rbegin(), executors.rend(),
-                [](auto &executor) { executor->clear(); });
   std::cout << "Tests result " << tests_result << std::endl;
   return tests_result;
 }

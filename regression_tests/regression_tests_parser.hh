@@ -30,4 +30,6 @@ private:
                                  std::string const &error_ending);
   bool lineFound(std::string const &expected_line) const;
   bool isCommentLine(std::string const &line_word) const;
+
+  std::string test_directory_name_;
 };

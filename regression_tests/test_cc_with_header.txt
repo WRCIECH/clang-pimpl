@@ -1,0 +1,33 @@
+GIVEN_FILESYSTEM tester
+main.hh
+main.cc
+END
+
+GIVEN_FILE main.hh
+  struct Test {
+    int a;
+    double b;
+  };
+END
+
+GIVEN_FILE main.cc
+  #include "main.hh"
+  int main(){}
+END
+
+EXECUTE
+record-name Test 
+fields-order b a
+END
+
+EXPECT_FILE main.hh
+  struct Test {
+    double b;
+    int a;
+  };
+END
+
+EXPECT_FILE main.cc
+  #include "main.hh"
+  int main(){}
+END

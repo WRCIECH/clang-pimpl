@@ -1,0 +1,24 @@
+GIVEN_FILESYSTEM tester
+main.cc
+END
+
+GIVEN_FILE main.cc
+  struct Test {
+    int a;
+    double b;
+    float c;
+  };
+END
+
+EXECUTE
+record-name Test 
+fields-order c b a
+END
+
+EXPECT_FILE main.cc
+  struct Test {
+    float c;
+    double b;
+    int a;
+  };
+END

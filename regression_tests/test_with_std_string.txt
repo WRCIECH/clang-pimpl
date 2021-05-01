@@ -1,0 +1,24 @@
+GIVEN_FILESYSTEM tester
+main.cc
+END
+
+GIVEN_FILE main.cc
+  #include <string>
+  struct Test {
+    std::string a;
+    double b;
+  };
+END
+
+EXECUTE
+record-name Test 
+fields-order b a
+END
+
+EXPECT_FILE main.cc
+  #include <string>
+  struct Test {
+    double b;
+    std::string a;
+  };
+END

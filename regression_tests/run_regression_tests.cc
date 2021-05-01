@@ -15,9 +15,5 @@ int main(int argc, char *argv[]) {
 
   RegressionTestsParser parser(TESTING_DIRECTORY_ROOT);
   auto result = parser.parseFile(test_location);
-
-  if (argc == 2) {
-    std::filesystem::remove_all(TESTING_DIRECTORY_ROOT);
-  }
   return result;
 }

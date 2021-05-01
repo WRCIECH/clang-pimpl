@@ -12,7 +12,8 @@ public:
   int execute(std::string const &expected_file_content) override {
     auto it = state_.file_name_to_path.find(file_name_);
     if (it == state_.file_name_to_path.end()) {
-      std::cout << "File was not found !!! \n";
+      std::cout << "ExpectFileCommand: " << file_name_
+                << "file was not found !!! \n";
       return -1;
     }
 

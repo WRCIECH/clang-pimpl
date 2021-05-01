@@ -1,14 +1,11 @@
-add_library(order-fields-lib
-    clang_order_fields_master.cc
-    order_fields_action.cc
+llvm_map_components_to_libnames(llvm_libs option core support irreader)
+add_clang_library(order-fields-lib
+  clang_order_fields_master.cc
+  order_fields_action.cc
 )
 
-# Find the libraries that correspond to the LLVM components
-# that we wish to use
-llvm_map_components_to_libnames(llvm_libs option core support irreader)
-
-# Link against LLVM libraries
-target_link_libraries(order-fields-lib
+clang_target_link_libraries(order-fields-lib
+  PRIVATE
 ${llvm_libs}
 clangAST
 clangASTMatchers
@@ -22,4 +19,4 @@ clangFrontend
 clangRewrite
 clangSerialization
 clangTooling
-)
+  )

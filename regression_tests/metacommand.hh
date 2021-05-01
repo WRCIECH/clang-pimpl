@@ -19,7 +19,6 @@ public:
   MetacommandExecutor(FieldsOrderPack &state) : state_(state) {}
   virtual ~MetacommandExecutor() = default;
   virtual int execute(std::string const &content) = 0;
-  virtual void clear() {}
 
 protected:
   FieldsOrderPack &state_;
