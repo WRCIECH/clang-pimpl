@@ -7,7 +7,7 @@
 #include <string>
 
 enum class Metacommand {
-  GIVEN_FILESYSTEM,
+  GIVEN_FILESTRUCTURE,
   GIVEN_FILE,
   EXECUTE,
   EXPECT_FILE,

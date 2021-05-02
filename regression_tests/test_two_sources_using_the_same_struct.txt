@@ -1,4 +1,4 @@
-GIVEN_FILESYSTEM tester
+GIVEN_FILESTRUCTURE tester
 main.hh
 file_one.cc
 file_two.cc

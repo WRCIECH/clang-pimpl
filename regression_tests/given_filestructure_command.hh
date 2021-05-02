@@ -4,11 +4,11 @@
 #include "llvm/Support/FileSystem.h"
 #include <algorithm>
 
-class GivenFilesystemCommand : public MetacommandExecutor {
+class GivenFilestructureCommand : public MetacommandExecutor {
 public:
-  GivenFilesystemCommand(CompilationPack &state,
-                         std::string const &test_directory_name,
-                         std::string const &main_directory)
+  GivenFilestructureCommand(CompilationPack &state,
+                            std::string const &test_directory_name,
+                            std::string const &main_directory)
       : MetacommandExecutor(state),
         main_directory_(test_directory_name + std::string("/") +
                         main_directory) {

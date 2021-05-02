@@ -3,7 +3,7 @@
 #include "execute_command.hh"
 #include "expect_file_command.hh"
 #include "given_file_command.hh"
-#include "given_filesystem_command.hh"
+#include "given_filestructure_command.hh"
 
 #include <boost/algorithm/string.hpp>
 #include <filesystem>
@@ -58,9 +58,9 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       }
       result.pop_front();
       switch (*metacommand) {
-      case Metacommand::GIVEN_FILESYSTEM:
+      case Metacommand::GIVEN_FILESTRUCTURE:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<GivenFilesystemCommand>(
+        executors.emplace_back(std::make_unique<GivenFilestructureCommand>(
             state, test_directory_name_, result[0]));
         break;
       case Metacommand::GIVEN_FILE:
@@ -101,8 +101,8 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
 
 std::optional<Metacommand>
 RegressionTestsParser::determineMetacommand(std::string const &s) {
-  if (s == "GIVEN_FILESYSTEM")
-    return Metacommand::GIVEN_FILESYSTEM;
+  if (s == "GIVEN_FILESTRUCTURE")
+    return Metacommand::GIVEN_FILESTRUCTURE;
   if (s == "GIVEN_FILE")
     return Metacommand::GIVEN_FILE;
   if (s == "EXECUTE")
