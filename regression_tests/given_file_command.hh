@@ -5,7 +5,7 @@
 
 class GivenFileCommand : public MetacommandExecutor {
 public:
-  GivenFileCommand(FieldsOrderPack &state, std::string const &file_name)
+  GivenFileCommand(CompilationPack &state, std::string const &file_name)
       : MetacommandExecutor(state), file_name_(file_name) {}
   int execute(std::string const &content) override {
     std::cout << "GivenFile command! " << file_name_ << "\n";

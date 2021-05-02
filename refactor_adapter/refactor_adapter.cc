@@ -1,5 +1,4 @@
-#include "clang_order_fields_master.hh"
-#include "order_fields_action.hh"
+#include "refactor_adapter.hh"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticOptions.h"
 #include "clang/Basic/FileManager.h"
@@ -13,8 +12,7 @@
 using namespace llvm;
 using namespace clang;
 
-int ClangOrderFieldsMaster::parseArguments(
-    std::unique_ptr<FilesKeeper> files_keeper) {
+int RefactorAdapter::parseArguments(std::unique_ptr<FilesKeeper> files_keeper) {
   files_keeper_ = std::move(files_keeper);
 
   if (!files_keeper_->isOk()) {
@@ -27,11 +25,9 @@ int ClangOrderFieldsMaster::parseArguments(
   return 0;
 }
 
-int ClangOrderFieldsMaster::performRefactoring() {
-  reorder_fields::ReorderFieldsAction action(
-      files_keeper_->getRecordName(), files_keeper_->getDesiredFieldsOrder(),
-      tool_->getReplacements());
-  auto factory = tooling::newFrontendActionFactory(&action);
+int RefactorAdapter::performRefactoring(
+    std::map<std::string, std::vector<std::string>> const &commands) {
+  auto factory = createFrontendFactory(commands);
 
   if (files_keeper_->isInplace()) {
     return tool_->runAndSave(factory.get());
@@ -40,7 +36,7 @@ int ClangOrderFieldsMaster::performRefactoring() {
   return performDryRunRefactoring(factory.get());
 }
 
-int ClangOrderFieldsMaster::performDryRunRefactoring(
+int RefactorAdapter::performDryRunRefactoring(
     clang::tooling::FrontendActionFactory *factory) {
   int exit_code = tool_->run(factory);
 

@@ -14,6 +14,8 @@ CommandLineFilesKeeper::create(int argc, const char **argv) {
       tooling::CommonOptionsParser::create(argc, argv,
                                            clang_reorder_fields_category_,
                                            cl::OneOrMore, usage_.c_str()));
+
+  // TODO: generate_commands_here !;
 }
 
 bool CommandLineFilesKeeper::isOk() {
@@ -32,15 +34,6 @@ const std::vector<std::string> *CommandLineFilesKeeper::getSourcePathList() {
 
 clang::tooling::CompilationDatabase *CommandLineFilesKeeper::getCompilations() {
   return &expected_parser_.get().getCompilations();
-}
-
-llvm::StringRef CommandLineFilesKeeper::getRecordName() const {
-  return record_name_;
-}
-
-llvm::ArrayRef<std::string>
-CommandLineFilesKeeper::getDesiredFieldsOrder() const {
-  return fields_order_;
 }
 
 bool CommandLineFilesKeeper::isInplace() const { return inplace_; }

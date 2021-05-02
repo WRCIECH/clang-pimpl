@@ -38,6 +38,7 @@ include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
 add_definitions(${LLVM_DEFINITIONS})
 
-add_subdirectory(clang_order_fields)
+add_subdirectory(refactor_adapter)
+add_subdirectory(refactor_tools)
 add_subdirectory(executables)
 add_subdirectory(regression_tests)

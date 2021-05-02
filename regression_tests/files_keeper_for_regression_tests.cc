@@ -5,7 +5,7 @@
 class CompilationDatabaseForRegressionTests
     : public clang::tooling::CompilationDatabase {
 public:
-  CompilationDatabaseForRegressionTests(FieldsOrderPack &pack) : pack_(pack) {}
+  CompilationDatabaseForRegressionTests(CompilationPack &pack) : pack_(pack) {}
 
 private:
   std::vector<clang::tooling::CompileCommand>
@@ -22,18 +22,18 @@ private:
   }
 
 private:
-  const FieldsOrderPack &pack_;
+  const CompilationPack &pack_;
 };
 
 FilesKeeperForRegressionTests::FilesKeeperForRegressionTests(
-    FieldsOrderPack &pack)
+    CompilationPack &pack)
     : pack_(pack) {
   compilation_database_ =
       std::make_unique<CompilationDatabaseForRegressionTests>(pack_);
 }
 
 std::unique_ptr<FilesKeeperForRegressionTests>
-FilesKeeperForRegressionTests::create(FieldsOrderPack &pack) {
+FilesKeeperForRegressionTests::create(CompilationPack &pack) {
   return std::make_unique<FilesKeeperForRegressionTests>(pack);
 }
 bool FilesKeeperForRegressionTests::isOk() { return true; }
@@ -49,13 +49,5 @@ FilesKeeperForRegressionTests::getSourcePathList() {
 clang::tooling::CompilationDatabase *
 FilesKeeperForRegressionTests::getCompilations() {
   return compilation_database_.get();
-}
-
-llvm::StringRef FilesKeeperForRegressionTests::getRecordName() const {
-  return pack_.record_name;
-}
-llvm::ArrayRef<std::string>
-FilesKeeperForRegressionTests::getDesiredFieldsOrder() const {
-  return pack_.fields_order;
 }
 bool FilesKeeperForRegressionTests::isInplace() const { return true; }

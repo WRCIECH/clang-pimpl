@@ -13,7 +13,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "order_fields_action.hh"
+#include "reorder_fields_action.hh"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/ASTContext.h"

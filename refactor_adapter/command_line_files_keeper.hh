@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../files_keeper.hh"
+#include "files_keeper.hh"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "llvm/Support/CommandLine.h"
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -27,12 +28,13 @@ public:
   llvm::Error getError() override;
 
   const std::vector<std::string> *getSourcePathList() override;
-
   clang::tooling::CompilationDatabase *getCompilations() override;
 
-  llvm::StringRef getRecordName() const override;
-  llvm::ArrayRef<std::string> getDesiredFieldsOrder() const override;
   bool isInplace() const override;
+
+  std::map<std::string, std::vector<std::string>> const &getCommands() const {
+    return commands_;
+  }
 
 private:
   static llvm::cl::opt<std::string> record_name_;
@@ -41,4 +43,5 @@ private:
   static llvm::cl::OptionCategory clang_reorder_fields_category_;
   static std::string usage_;
   llvm::Expected<clang::tooling::CommonOptionsParser> expected_parser_;
+  std::map<std::string, std::vector<std::string>> commands_;
 }; // namespace FilesKeeper

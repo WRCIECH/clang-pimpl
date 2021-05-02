@@ -25,7 +25,7 @@ public:
 
   virtual const std::vector<std::string> *getSourcePathList() = 0;
   virtual clang::tooling::CompilationDatabase *getCompilations() = 0;
-  virtual llvm::StringRef getRecordName() const = 0;
-  virtual llvm::ArrayRef<std::string> getDesiredFieldsOrder() const = 0;
+  // virtual llvm::StringRef getRecordName() const = 0;
+  // virtual llvm::ArrayRef<std::string> getDesiredFieldsOrder() const = 0;
   virtual bool isInplace() const = 0;
 };

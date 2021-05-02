@@ -7,7 +7,7 @@
 
 class ExpectFileCommand : public MetacommandExecutor {
 public:
-  ExpectFileCommand(FieldsOrderPack &state, std::string const &file_name)
+  ExpectFileCommand(CompilationPack &state, std::string const &file_name)
       : MetacommandExecutor(state), file_name_(file_name) {}
   int execute(std::string const &expected_file_content) override {
     auto it = state_.file_name_to_path.find(file_name_);

@@ -37,7 +37,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
   std::string content{};
   bool requires_metacommand{true};
   std::vector<std::unique_ptr<MetacommandExecutor>> executors;
-  FieldsOrderPack state;
+  CompilationPack state;
 
   try {
     while (std::getline(file, line)) {

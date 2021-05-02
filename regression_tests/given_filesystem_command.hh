@@ -6,7 +6,7 @@
 
 class GivenFilesystemCommand : public MetacommandExecutor {
 public:
-  GivenFilesystemCommand(FieldsOrderPack &state,
+  GivenFilesystemCommand(CompilationPack &state,
                          std::string const &test_directory_name,
                          std::string const &main_directory)
       : MetacommandExecutor(state),

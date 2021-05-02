@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fields_order_pack.hh"
+#include "compilation_pack.hh"
 #include "llvm/Support/FileSystem.h"
 #include <iomanip>
 #include <iostream>
@@ -16,10 +16,10 @@ enum class Metacommand {
 
 class MetacommandExecutor {
 public:
-  MetacommandExecutor(FieldsOrderPack &state) : state_(state) {}
+  MetacommandExecutor(CompilationPack &state) : state_(state) {}
   virtual ~MetacommandExecutor() = default;
   virtual int execute(std::string const &content) = 0;
 
 protected:
-  FieldsOrderPack &state_;
+  CompilationPack &state_;
 };
