@@ -16,10 +16,10 @@ enum class Metacommand {
 
 class MetacommandExecutor {
 public:
-  MetacommandExecutor(CompilationPack &state) : state_(state) {}
+  MetacommandExecutor(CompilationPack *state) : state_(state) {}
   virtual ~MetacommandExecutor() = default;
   virtual int execute(std::string const &content) = 0;
 
 protected:
-  CompilationPack &state_;
+  CompilationPack *state_;
 };

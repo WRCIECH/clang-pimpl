@@ -1,9 +1,9 @@
 #pragma once
 
+#include "command_maps.hh"
 #include "files_keeper.hh"
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "llvm/Support/CommandLine.h"
-#include <map>
 #include <memory>
 #include <vector>
 
@@ -20,28 +20,18 @@ class CommonOptionsParser;
 class CommandLineFilesKeeper : public FilesKeeper {
 public:
   CommandLineFilesKeeper(
-      llvm::Expected<clang::tooling::CommonOptionsParser> &&p);
+      int argc, const char **argv,
+      std::shared_ptr<OptionsAdapterForCommandLine> options_adapter);
 
-  static std::unique_ptr<CommandLineFilesKeeper> create(int argc,
-                                                        const char **argv);
+  static std::unique_ptr<CommandLineFilesKeeper>
+  create(int argc, const char **argv,
+         std::shared_ptr<OptionsAdapterForCommandLine> options_adapter);
   bool isOk() override;
   llvm::Error getError() override;
-
   const std::vector<std::string> *getSourcePathList() override;
   clang::tooling::CompilationDatabase *getCompilations() override;
-
   bool isInplace() const override;
 
-  std::map<std::string, std::vector<std::string>> const &getCommands() const {
-    return commands_;
-  }
-
 private:
-  static llvm::cl::opt<std::string> record_name_;
-  static llvm::cl::list<std::string> fields_order_;
-  static llvm::cl::opt<bool> inplace_;
-  static llvm::cl::OptionCategory clang_reorder_fields_category_;
-  static std::string usage_;
   llvm::Expected<clang::tooling::CommonOptionsParser> expected_parser_;
-  std::map<std::string, std::vector<std::string>> commands_;
 }; // namespace FilesKeeper

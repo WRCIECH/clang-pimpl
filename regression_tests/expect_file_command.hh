@@ -7,18 +7,17 @@
 
 class ExpectFileCommand : public MetacommandExecutor {
 public:
-  ExpectFileCommand(CompilationPack &state, std::string const &file_name)
+  ExpectFileCommand(CompilationPack *state, std::string const &file_name)
       : MetacommandExecutor(state), file_name_(file_name) {}
   int execute(std::string const &expected_file_content) override {
-    auto it = state_.file_name_to_path.find(file_name_);
-    if (it == state_.file_name_to_path.end()) {
-      std::cout << "ExpectFileCommand: " << file_name_
+    auto file_path = state_->findPath(file_name_);
+    if (file_path.empty()) {
+      std::cerr << "ExpectFileCommand: " << file_name_
                 << "file was not found !!! \n";
       return -1;
     }
 
-    std::cout << "file path: " << it->second << std::endl;
-    std::ifstream modified_file{it->second};
+    std::ifstream modified_file{file_path};
     std::stringstream modified_content;
     modified_content << modified_file.rdbuf();
 

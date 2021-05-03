@@ -25,9 +25,8 @@ int RefactorAdapter::parseArguments(std::unique_ptr<FilesKeeper> files_keeper) {
   return 0;
 }
 
-int RefactorAdapter::performRefactoring(
-    std::map<std::string, std::vector<std::string>> const &commands) {
-  auto factory = createFrontendFactory(commands);
+int RefactorAdapter::performRefactoring() {
+  auto factory = createFrontendFactory(files_keeper_->getCommands());
 
   if (files_keeper_->isInplace()) {
     return tool_->runAndSave(factory.get());

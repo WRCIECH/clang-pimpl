@@ -5,17 +5,19 @@ using namespace llvm;
 using namespace clang;
 
 CommandLineFilesKeeper::CommandLineFilesKeeper(
-    llvm::Expected<clang::tooling::CommonOptionsParser> &&p)
-    : expected_parser_(std::move(p)) {}
+    int argc, const char **argv,
+    std::shared_ptr<OptionsAdapterForCommandLine> options_adapter)
+    : FilesKeeper(options_adapter),
+      expected_parser_(tooling::CommonOptionsParser::create(
+          argc, argv, options_adapter->getOptionsCategory(),
+          options_adapter->getNumOccurencesFlag(),
+          options_adapter->getUsage())) {}
 
-std::unique_ptr<CommandLineFilesKeeper>
-CommandLineFilesKeeper::create(int argc, const char **argv) {
-  return std::make_unique<CommandLineFilesKeeper>(
-      tooling::CommonOptionsParser::create(argc, argv,
-                                           clang_reorder_fields_category_,
-                                           cl::OneOrMore, usage_.c_str()));
-
-  // TODO: generate_commands_here !;
+std::unique_ptr<CommandLineFilesKeeper> CommandLineFilesKeeper::create(
+    int argc, const char **argv,
+    std::shared_ptr<OptionsAdapterForCommandLine> options_adapter) {
+  return std::make_unique<CommandLineFilesKeeper>(argc, argv,
+                                                  std::move(options_adapter));
 }
 
 bool CommandLineFilesKeeper::isOk() {
@@ -36,19 +38,6 @@ clang::tooling::CompilationDatabase *CommandLineFilesKeeper::getCompilations() {
   return &expected_parser_.get().getCompilations();
 }
 
-bool CommandLineFilesKeeper::isInplace() const { return inplace_; }
-
-cl::opt<std::string> CommandLineFilesKeeper::record_name_{
-    "record-name", cl::Required, cl::desc("The name of the struct/class."),
-    cl::cat(clang_reorder_fields_category_)};
-cl::list<std::string> CommandLineFilesKeeper::fields_order_{
-    "fields-order", cl::CommaSeparated, cl::OneOrMore,
-    cl::desc("The desired fields order."),
-    cl::cat(clang_reorder_fields_category_)};
-cl::OptionCategory CommandLineFilesKeeper::clang_reorder_fields_category_{
-    "clang-reorder-fields options"};
-std::string CommandLineFilesKeeper::usage_{
-    "A tool to reorder fields in C/C++ structs/classes.\n"};
-cl::opt<bool> CommandLineFilesKeeper::inplace_{
-    "i", cl::desc("Overwrite edited files."),
-    cl::cat(clang_reorder_fields_category_)};
+bool CommandLineFilesKeeper::isInplace() const {
+  return options_adapter_->isInplace();
+}

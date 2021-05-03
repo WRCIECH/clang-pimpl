@@ -36,9 +36,11 @@ message(STATUS "Clang cmake dir: ${CLANG_CMAKE_DIR}")
 
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
+include_directories("/home/wojciech/libraries/boost_1_74_0")
+
 add_definitions(${LLVM_DEFINITIONS})
 
 add_subdirectory(refactor_adapter)
 add_subdirectory(refactor_tools)
-add_subdirectory(executables)
 add_subdirectory(regression_tests)
+add_subdirectory(executables)

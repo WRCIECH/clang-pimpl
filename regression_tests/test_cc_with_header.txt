@@ -16,8 +16,7 @@ GIVEN_FILE main.cc
 END
 
 EXECUTE
-record-name Test 
-fields-order b a
+--record-name=Test --fields-order=b,a
 END
 
 EXPECT_FILE main.hh

@@ -10,30 +10,17 @@
 
 class ReorderFieldsRefactorAdapter : public RefactorAdapter {
 public:
-  std::unique_ptr<clang::tooling::FrontendActionFactory> createFrontendFactory(
-      std::map<std::string, std::vector<std::string>> const &commands)
-      override {
-
-    if (commands.count("record-name") > 0) {
-      record_name = commands.at("record-name")[0];
-    } else {
-      std::cout << "record-name command not recognized\n";
-    }
-    if (commands.count("fields-order") > 0) {
-      fields_order = commands.at("fields-order");
-    } else {
-      std::cout << "fields-order command not recognized\n";
-    }
+  std::unique_ptr<clang::tooling::FrontendActionFactory>
+  createFrontendFactory(CommandMaps const &commands) override {
+    // TODO: protect against exceptions!
 
     action_ = std::make_unique<clang::reorder_fields::ReorderFieldsAction>(
-        record_name, fields_order, tool_->getReplacements());
+        commands.string_map.at("record-name"),
+        commands.array_map.at("fields-order"), tool_->getReplacements());
 
     return clang::tooling::newFrontendActionFactory(action_.get());
   }
 
 private:
   std::unique_ptr<clang::reorder_fields::ReorderFieldsAction> action_;
-
-  std::string record_name;
-  std::vector<std::string> fields_order;
 };
