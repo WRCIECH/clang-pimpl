@@ -1,7 +1,8 @@
-GIVEN_FILESTRUCTURE tester
-main.hh
-file_one.cc
-file_two.cc
+GIVEN_FILESTRUCTURE
+tester
+  main.hh
+  file_one.cc
+  file_two.cc
 END
 
 GIVEN_FILE main.hh

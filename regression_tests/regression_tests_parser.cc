@@ -53,7 +53,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
       case Metacommand::GIVEN_FILESTRUCTURE:
         requires_metacommand = false;
         executors.emplace_back(std::make_unique<GivenFilestructureCommand>(
-            state.get(), test_directory_name_, result[0]));
+            state.get(), test_directory_name_));
         break;
       case Metacommand::GIVEN_FILE:
         requires_metacommand = false;

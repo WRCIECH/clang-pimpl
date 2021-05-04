@@ -1,5 +1,6 @@
-GIVEN_FILESTRUCTURE tester
-main.cc
+GIVEN_FILESTRUCTURE
+tester
+  main.cc
 END
 
 GIVEN_FILE main.cc

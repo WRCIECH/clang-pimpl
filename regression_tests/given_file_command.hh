@@ -10,7 +10,7 @@ public:
   int execute(std::string const &content) override {
     auto file_path = state_->findPath(file_name_);
     if (file_path.empty()) {
-      std::cerr << "ExpectFileCommand: " << file_name_
+      std::cerr << "GivenFileCommand: " << file_name_
                 << "file was not found !!! \n";
       return -1;
     }
