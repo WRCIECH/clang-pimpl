@@ -23,3 +23,11 @@ EXPECT_FILE main.cc
     int a;
   };
 END
+
+EXPECT_FILESTRUCTURE
+tester_1
+  tester_2
+    tester_3
+      tester_4
+        main.cc
+END

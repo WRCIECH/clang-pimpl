@@ -2,6 +2,7 @@
 
 #include "execute_command.hh"
 #include "expect_file_command.hh"
+#include "expect_filestructure_command.hh"
 #include "given_file_command.hh"
 #include "given_filestructure_command.hh"
 
@@ -69,6 +70,11 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
         executors.emplace_back(
             std::make_unique<ExpectFileCommand>(state.get(), result[0]));
         break;
+      case Metacommand::EXPECT_FILESTRUCTURE:
+        requires_metacommand = false;
+        executors.emplace_back(std::make_unique<ExpectFilestructureCommand>(
+            state.get(), test_directory_name_));
+        break;
       case Metacommand::END:
         requires_metacommand = true;
         if (!content.empty()) {
@@ -104,6 +110,8 @@ RegressionTestsParser::determineMetacommand(std::string const &s) {
     return Metacommand::EXECUTE;
   if (s == "EXPECT_FILE")
     return Metacommand::EXPECT_FILE;
+  if (s == "EXPECT_FILESTRUCTURE")
+    return Metacommand::EXPECT_FILESTRUCTURE;
   if (s == "END")
     return Metacommand::END;
 

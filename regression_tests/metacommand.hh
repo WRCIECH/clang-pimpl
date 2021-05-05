@@ -11,6 +11,7 @@ enum class Metacommand {
   GIVEN_FILE,
   EXECUTE,
   EXPECT_FILE,
+  EXPECT_FILESTRUCTURE,
   END
 };
 
