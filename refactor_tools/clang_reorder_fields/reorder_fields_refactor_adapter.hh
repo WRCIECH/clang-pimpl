@@ -11,15 +11,7 @@
 class ReorderFieldsRefactorAdapter : public RefactorAdapter {
 public:
   std::unique_ptr<clang::tooling::FrontendActionFactory>
-  createFrontendFactory(CommandMaps const &commands) override {
-    // TODO: protect against exceptions!
-
-    action_ = std::make_unique<clang::reorder_fields::ReorderFieldsAction>(
-        commands.string_map.at("record-name"),
-        commands.array_map.at("fields-order"), tool_->getReplacements());
-
-    return clang::tooling::newFrontendActionFactory(action_.get());
-  }
+  createFrontendFactory(CommandMaps const &commands) override;
 
 private:
   std::unique_ptr<clang::reorder_fields::ReorderFieldsAction> action_;
