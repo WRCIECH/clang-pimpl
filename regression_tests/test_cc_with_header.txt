@@ -26,8 +26,3 @@ EXPECT_FILE main.hh
     int a;
   };
 END
-
-EXPECT_FILE main.cc
-  #include "main.hh"
-  int main(){}
-END

@@ -20,6 +20,8 @@ public:
     llvm::raw_fd_ostream file_writer(fd, true);
     file_writer << content;
 
+    state_->file_content_map[file_name_] = content;
+
     return 0;
   }
 

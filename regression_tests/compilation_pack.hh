@@ -2,6 +2,8 @@
 
 #include "clang/Tooling/CompilationDatabase.h"
 #include <iostream>
+#include <map>
+#include <set>
 #include <vector>
 
 struct CompilationPack {
@@ -16,4 +18,13 @@ struct CompilationPack {
     }
     return "";
   }
+
+  bool filenameNotChecked(std::string const &filename) {
+    return checked_files.count(filename) < 1;
+  }
+  // Variables needed for post-checking.
+  std::set<std::string> checked_files;
+  std::map<std::string, std::string> initial_files_map;
+  bool filestructure_checked{false};
+  std::map<std::string, std::string> file_content_map;
 };

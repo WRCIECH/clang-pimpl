@@ -13,9 +13,9 @@ public:
 
   int execute(std::string const &content) override {
     state_->all_files = generateListOfFiles(content).first;
-    auto connections = generateListOfFiles(content).second;
+    state_->initial_files_map = generateListOfFiles(content).second;
     for (auto const &f : state_->all_files) {
-      auto short_path_to_file = generateShortPath(f, std::move(connections));
+      auto short_path_to_file = generateShortPath(f, state_->initial_files_map);
       createFile(f, short_path_to_file);
     }
     return 0;

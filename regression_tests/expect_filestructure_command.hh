@@ -15,11 +15,12 @@ class ExpectFilestructureCommand : public FilestructureCommand {
 public:
   ExpectFilestructureCommand(CompilationPack *state,
                              std::string const &test_directory_name)
-      : FilestructureCommand(state, test_directory_name) {}
+      : FilestructureCommand(state, test_directory_name) {
+    state_->filestructure_checked = true;
+  }
   ~ExpectFilestructureCommand() = default;
 
   int execute(std::string const &content) override {
-
     std::string output{};
     for (auto entry = std::filesystem::recursive_directory_iterator(
              testing_project_directory_.c_str());

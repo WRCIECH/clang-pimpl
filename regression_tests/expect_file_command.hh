@@ -8,7 +8,9 @@
 class ExpectFileCommand : public MetacommandExecutor {
 public:
   ExpectFileCommand(CompilationPack *state, std::string const &file_name)
-      : MetacommandExecutor(state), file_name_(file_name) {}
+      : MetacommandExecutor(state), file_name_(file_name) {
+    state_->checked_files.insert(file_name_);
+  }
   int execute(std::string const &expected_file_content) override {
     auto file_path = state_->findPath(file_name_);
     if (file_path.empty()) {

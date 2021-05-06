@@ -36,17 +36,3 @@ EXPECT_FILE main.hh
     int a;
   };
 END
-
-EXPECT_FILE file_one.cc
-  #include "main.hh"
-  struct UseTestOne{
-    Test t;
-  };
-END
-
-EXPECT_FILE file_two.cc
-  #include "main.hh"
-  struct UseTestTwo{
-    Test t;
-  };
-END

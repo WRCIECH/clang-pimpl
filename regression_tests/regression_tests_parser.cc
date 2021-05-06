@@ -5,6 +5,7 @@
 #include "expect_filestructure_command.hh"
 #include "given_file_command.hh"
 #include "given_filestructure_command.hh"
+#include "otherwise_nothing_changed_command.hh"
 
 #include <boost/algorithm/string.hpp>
 #include <filesystem>
@@ -86,6 +87,12 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
         }
         break;
       }
+    }
+    auto last_command = std::make_unique<OtherwiseNothingChangedCommand>(
+        state.get(), test_directory_name_);
+    tests_result = last_command->execute("");
+    if (tests_result != 0) {
+      return tests_result;
     }
   } catch (ParsingException const &e) {
     std::cerr << "in file: " << file_location << ", line "
