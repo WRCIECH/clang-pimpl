@@ -1,0 +1,29 @@
+GIVEN_FILESTRUCTURE
+  main.hh
+  main.cc
+END
+
+GIVEN_FILE main.hh
+  struct Tester{
+    int get_value() { return 22; }
+  };
+END
+
+GIVEN_FILE main.cc
+  #include "main.hh"
+END
+
+EXECUTE clang-definitions-mover
+--class-name=Tester
+END
+
+EXPECT_FILE main.hh
+  struct Tester{
+    int get_value();
+  };
+END
+
+EXPECT_FILE main.cc
+  #include "main.hh"
+  int Tester::get_value() { return 22; }
+END

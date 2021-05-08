@@ -25,8 +25,10 @@ public:
                   std::string const &short_path_to_file) {
 
     auto path_to_directory{testing_project_directory_};
-    path_to_directory.append({"/", short_path_to_file});
-    auto result = llvm::sys::fs::create_directories(path_to_directory, false);
+    if (!short_path_to_file.empty()) {
+      path_to_directory.append({"/", short_path_to_file});
+      auto result = llvm::sys::fs::create_directories(path_to_directory, false);
+    }
     int file_succeeded{0};
     auto path_to_file{path_to_directory};
     path_to_file.append({"/", file_name});
@@ -43,6 +45,7 @@ public:
     state_->source_path_list.emplace_back(path_to_file.c_str());
     clang::tooling::CompileCommand compile_command(
         testing_project_directory_.c_str(), path_to_file.c_str(),
+        // change!
         {"/home/wojciech/libraries/llvm-project/build/bin/clang++", "-o",
          "-I/home/wojciech/libraries/llvm-project/clang/lib/Headers",
          "-I/usr/lib/gcc/x86_64-linux-gnu/10/include",

@@ -33,7 +33,9 @@ public:
       result += *cit;
       result += std::string("/");
     }
-    result.pop_back();
+    if (!result.empty()) {
+      result.pop_back();
+    }
     return result;
   }
 
@@ -72,5 +74,6 @@ public:
   }
 
 protected:
-  llvm::SmallString<128> testing_project_directory_;
+  static constexpr int MAX_STRING_SIZE{256};
+  llvm::SmallString<MAX_STRING_SIZE> testing_project_directory_;
 };
