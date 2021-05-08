@@ -3,13 +3,14 @@ run_regression_tests.cc
 regression_tests_parser.cc
 files_keeper_for_regression_tests.cc
 )
-target_compile_definitions("RunRegressionTests" PUBLIC TESTFILES_LOCATION="${CMAKE_CURRENT_SOURCE_DIR}/")
-
 target_link_libraries("RunRegressionTests" refactor-adapter-lib reorder-fields-lib)
 
-add_test (NAME TestTwoFieldsStruct COMMAND $<TARGET_FILE:RunRegressionTests> test_two_fields_struct.txt)
-add_test (NAME TestThreeFieldsStruct COMMAND $<TARGET_FILE:RunRegressionTests> test_three_fields_struct.txt)
-add_test (NAME TestHeaderWithCCFieldsStruct COMMAND $<TARGET_FILE:RunRegressionTests> test_cc_with_header.txt)
-add_test (NAME TestWithStdString COMMAND $<TARGET_FILE:RunRegressionTests> test_with_std_string.txt)
-add_test (NAME TestTwoSourcesUsingTheSameStruct COMMAND $<TARGET_FILE:RunRegressionTests> test_two_sources_using_the_same_struct.txt)
-add_test (NAME TestDeeplyRootedMain COMMAND $<TARGET_FILE:RunRegressionTests> test_deeply_rooted_main.txt)
+file(GLOB test_directories "clang-*")
+foreach(testfile_location ${test_directories})
+  file(GLOB files "${testfile_location}/*.txt")
+  foreach(file ${files})
+    get_filename_component(TestName "${file}" NAME_WE)
+    get_filename_component(TestFileName "${file}" NAME)
+    add_test (NAME ${TestName} COMMAND "$<TARGET_FILE:RunRegressionTests>" ${TestName} ${file})
+  endforeach()
+endforeach()
