@@ -16,7 +16,7 @@ GIVEN_FILE main.cc
   int main(){}
 END
 
-EXECUTE
+EXECUTE clang-reorder-fields
 --record-name=Test --fields-order=b,a
 END
 

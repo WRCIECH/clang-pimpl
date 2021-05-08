@@ -64,7 +64,8 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
         break;
       case Metacommand::EXECUTE:
         requires_metacommand = false;
-        executors.emplace_back(std::make_unique<ExecuteCommand>(state.get()));
+        executors.emplace_back(
+            std::make_unique<ExecuteCommand>(state.get(), result[0]));
         break;
       case Metacommand::EXPECT_FILE:
         requires_metacommand = false;

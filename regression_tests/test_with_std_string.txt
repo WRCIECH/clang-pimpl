@@ -11,7 +11,7 @@ GIVEN_FILE main.cc
   };
 END
 
-EXECUTE
+EXECUTE clang-reorder-fields
 --record-name=Test fields-order=b,a
 END
 
