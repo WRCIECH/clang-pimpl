@@ -18,6 +18,25 @@ RegressionTestsParser::RegressionTestsParser(
     std::string const &directory_location)
     : test_directory_name_(directory_location) {}
 
+std::vector<std::string> RegressionTestsParser::loadIncludeDirectories() {
+  std::filesystem::path p{INCLUDE_DIRECTORIES_LOCATION};
+  auto file_path = p / ".include-directories-for-regression-tests";
+  std::fstream include_directories_for_regression_tests{file_path};
+  if (!include_directories_for_regression_tests.is_open()) {
+    std::cerr << file_path.string()
+              << " file is not defined. Define it and provide paths to local "
+                 "stl library and {path_to_llvm_project}/clang/lib/Headers "
+                 "directories\n";
+    return {};
+  }
+  std::vector<std::string> result;
+  std::copy(
+      std::istream_iterator<std::string>{
+          include_directories_for_regression_tests},
+      {}, std::back_inserter(result));
+  return result;
+}
+
 int RegressionTestsParser::parseFile(std::string const &file_location) {
   std::fstream file(file_location);
   int tests_result{0};
@@ -33,6 +52,10 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     std::string content{};
     bool requires_metacommand{true};
     std::vector<std::unique_ptr<MetacommandExecutor>> executors;
+    auto include_directories = loadIncludeDirectories();
+    if (include_directories.empty()) {
+      return -1;
+    }
     auto state = std::make_unique<CompilationPack>();
     while (std::getline(file, line)) {
       ++current_line_number;

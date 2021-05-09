@@ -7,6 +7,11 @@
 #include <vector>
 
 struct CompilationPack {
+
+  std::vector<std::string> include_directories{
+      "-I/home/wojciech/libraries/llvm-project/clang/lib/Headers",
+      "-I/usr/lib/gcc/x86_64-linux-gnu/10/include"};
+
   std::vector<std::string> source_path_list;
   std::vector<std::string> all_files;
   std::vector<clang::tooling::CompileCommand> compile_commands;
@@ -22,6 +27,7 @@ struct CompilationPack {
   bool filenameNotChecked(std::string const &filename) {
     return checked_files.count(filename) < 1;
   }
+
   // Variables needed for post-checking.
   std::set<std::string> checked_files;
   std::map<std::string, std::string> initial_files_map;

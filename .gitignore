@@ -2,6 +2,9 @@
 build/
 .vscode
 
+# Helper hidden files
+.include-directories-for-regression-tests
+
 # Prerequisites
 *.d
 

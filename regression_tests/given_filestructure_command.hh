@@ -42,15 +42,14 @@ public:
       error_message << op_result.message();
       throw ParsingException(error_message.str());
     }
+
+    std::vector<std::string> command_line(state_->include_directories);
+    command_line.emplace_back(path_to_file.c_str());
+
     state_->source_path_list.emplace_back(path_to_file.c_str());
     clang::tooling::CompileCommand compile_command(
         testing_project_directory_.c_str(), path_to_file.c_str(),
-        // change!
-        {"/home/wojciech/libraries/llvm-project/build/bin/clang++", "-o",
-         "-I/home/wojciech/libraries/llvm-project/clang/lib/Headers",
-         "-I/usr/lib/gcc/x86_64-linux-gnu/10/include",
-         "CMakeFiles/test_app.dir/main.cc.o", "-c", path_to_file.c_str()},
-        "");
+        std::move(command_line), "");
     state_->compile_commands.emplace_back(std::move(compile_command));
   }
 };

@@ -22,6 +22,7 @@ public:
   int parseFile(std::string const &file_location);
 
 private:
+  std::vector<std::string> loadIncludeDirectories();
   static std::optional<Metacommand> determineMetacommand(std::string const &s);
   void executeCommand(std::deque<std::string> const &words);
   void executeThen(std::string const &expected_line);
