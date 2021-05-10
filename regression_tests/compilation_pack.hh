@@ -7,11 +7,9 @@
 #include <vector>
 
 struct CompilationPack {
+  CompilationPack(std::vector<std::string>&& includes): include_directories(std::move(includes)) {}
 
-  std::vector<std::string> include_directories{
-      "-I/home/wojciech/libraries/llvm-project/clang/lib/Headers",
-      "-I/usr/lib/gcc/x86_64-linux-gnu/10/include"};
-
+  std::vector<std::string> include_directories;
   std::vector<std::string> source_path_list;
   std::vector<std::string> all_files;
   std::vector<clang::tooling::CompileCommand> compile_commands;

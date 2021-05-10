@@ -45,6 +45,9 @@ public:
 
     std::vector<std::string> command_line(state_->include_directories);
     command_line.emplace_back(path_to_file.c_str());
+    for(auto f : command_line) {
+        std::cerr << "Option: " << f << std::endl;
+    }
 
     state_->source_path_list.emplace_back(path_to_file.c_str());
     clang::tooling::CompileCommand compile_command(

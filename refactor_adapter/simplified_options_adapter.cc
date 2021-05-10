@@ -4,15 +4,16 @@
 #include <iostream>
 
 // Boost complains for some unknown reasons...
-#define BOOST_NO_EXCEPTIONS
-void boost::throw_exception(std::exception const &e) {}
+//#define BOOST_NO_EXCEPTIONS
+//void boost::throw_exception(std::exception const &e) {}
 
 SimplifiedOptionsAdapter::SimplifiedOptionsAdapter(std::string const &line)
     : line_(line) {
-  std::vector<std::string_view> result;
+  std::vector<std::string> result;
   boost::split(result, line_, boost::is_any_of(" "));
   for (auto &c : result) {
-    c.remove_prefix(std::min(c.find_first_not_of("-"), c.size()));
+    //c.remove_prefix(std::min(c.find_first_not_of("-"), c.size()));
+      c.erase(0, std::min(c.find_first_not_of("-"), c.size()));
   }
 
   for (auto &c : result) {
