@@ -1,4 +1,4 @@
-#include "refactor_tools/clang_reorder_fields/reorder_fields_options_adapter.hh"
+#include "simplified_options_adapter.hh"
 #include <boost/algorithm/string.hpp>
 #include <boost/throw_exception.hpp>
 #include <iostream>
@@ -7,8 +7,7 @@
 #define BOOST_NO_EXCEPTIONS
 void boost::throw_exception(std::exception const &e) {}
 
-ReorderFieldsOptionsAdapterForRegressionTests::
-    ReorderFieldsOptionsAdapterForRegressionTests(std::string const &line)
+SimplifiedOptionsAdapter::SimplifiedOptionsAdapter(std::string const &line)
     : line_(line) {
   std::vector<std::string_view> result;
   boost::split(result, line_, boost::is_any_of(" "));
@@ -31,7 +30,6 @@ ReorderFieldsOptionsAdapterForRegressionTests::
   }
 }
 
-CommandMaps const &
-ReorderFieldsOptionsAdapterForRegressionTests::getCommands() {
+CommandMaps const &SimplifiedOptionsAdapter::getCommands() {
   return command_maps_;
 }

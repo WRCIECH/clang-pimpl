@@ -2,7 +2,8 @@
 
 #include "files_keeper_for_regression_tests.hh"
 #include "metacommand.hh"
-#include "refactor_tools/clang_reorder_fields/reorder_fields_options_adapter.hh"
+#include "refactor_adapter/simplified_options_adapter.hh"
+#include "refactor_tools/clang_definitions_mover/definitions_mover_refactor_adapter.hh"
 #include "refactor_tools/clang_reorder_fields/reorder_fields_refactor_adapter.hh"
 #include "llvm/Support/FileSystem.h"
 
@@ -21,9 +22,7 @@ public:
 
     auto parsing_result =
         m->parseArguments(FilesKeeperForRegressionTests::create(
-            state_,
-            std::make_shared<ReorderFieldsOptionsAdapterForRegressionTests>(
-                content)));
+            state_, std::make_shared<SimplifiedOptionsAdapter>(content)));
     if (parsing_result) {
       std::cerr << "ExecuteCommand: parsing failed for refactor "
                 << refactor_name_ << "!\n";
@@ -36,8 +35,11 @@ private:
   std::unique_ptr<RefactorAdapter> determineRefactorAdapter() {
     if (refactor_name_ == "clang-reorder-fields") {
       return std::make_unique<ReorderFieldsRefactorAdapter>();
+    } else if ("clang-definitions-mover") {
+      return std::make_unique<DefinitionsMoverRefactorAdapter>();
     }
     return nullptr;
   }
+
   std::string refactor_name_;
 };

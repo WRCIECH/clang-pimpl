@@ -1,1 +1,2 @@
 add_subdirectory(clang_reorder_fields)
+add_subdirectory(clang_definitions_mover)

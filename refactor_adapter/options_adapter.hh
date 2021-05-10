@@ -1,5 +1,7 @@
 #pragma once
 
+#include "command_maps.hh"
+
 class OptionsAdapter {
 public:
   virtual ~OptionsAdapter() = default;
