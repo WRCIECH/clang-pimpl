@@ -1,6 +1,9 @@
 # Build
 build/
 .vscode
+.idea
+Testing
+cmake-build-debug
 
 # Helper hidden files
 .include-directories-for-regression-tests

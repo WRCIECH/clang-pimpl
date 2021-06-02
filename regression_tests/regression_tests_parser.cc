@@ -56,7 +56,7 @@ int RegressionTestsParser::parseFile(std::string const &file_location) {
     if (include_directories.empty()) {
       return -1;
     }
-    auto state = std::make_unique<CompilationPack>();
+    auto state = std::make_unique<CompilationPack>(std::move(include_directories));
     while (std::getline(file, line)) {
       ++current_line_number;
       std::deque<std::string> result;

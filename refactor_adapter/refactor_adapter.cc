@@ -7,7 +7,6 @@
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include <iostream>
 
 using namespace llvm;
 using namespace clang;
